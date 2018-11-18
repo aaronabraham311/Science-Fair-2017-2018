@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Including libraries\nlibrary(caret)\nlibrary(tidyverse)\n\n# Loading in dataset\ndata <- read.csv(\"data/brain_volume_mlData.csv\")\n\n# Dropping subject id column\ndrops <- c(\"Subject.ID\")\ndata <- data[,!(names(data) %in% drops)]\n\n#Setting seed for reproducibility \nset.seed(123)\n\n#Factoring classes and splitting data into testing and training\ndata$Name <- as.factor(data$Name)\n\nindices <- createDataPartition(data$Name, p = 0.7, list = FALSE) #70% of data will be for training\ntrain <- data[indices,]\ntest <- data[-indices,]\n\ntrain <- train[sample(nrow(train)),] # Mixing up rows to remove any patterns\n\n# Loading models \n## Metabolite models\nknn_metabolite <- readRDS(\"loocv_knn.rds\")\ncart_metabolite <- readRDS(\"loocv_cart.rds\")\nlog_metabolite <- readRDS(\"loocv_log.rds\")\nrf_metabolite <- readRDS(\"loocv_rf.rds\")\nsvm_metabolite <- readRDS(\"loocv_svm.RDS\")\nensemble_metabolite <- readRDS(\"ensemble.rds\")\n\n## Brain imaging models\nknn_brain <- readRDS(\"knn_brain.rds\")\ncart_brain <- readRDS(\"cart_brain.rds\")\nlog_brain <- readRDS(\"log_brain.rds\")\nrf_brain <- readRDS(\"rf_brain.rds\")\nsvm_brain <- readRDS(\"svm_brain.rds\")\nensemble_brain <- readRDS(\"ensemble_brain.rds\")\n\n## Combined models\nknn_combined <- readRDS(\"knn_brain&metabolite.rds\")\ncart_combined <- readRDS(\"cart_brain&metabolite.rds\")\nlog_combined <- readRDS(\"log_brain&metabolite.rds\")\nrf_combined <- readRDS(\"rf_brain&metabolite.rds\")\nsvm_combined <- readRDS(\"svm_brain&metabolite.rds\")\nensemble_combined <- readRDS(\"ensemble_brain&metabolite.rds\")\n\n# Creating predictions\n## Metabolite models\nknn_metabolitePred <- predict(knn_metabolite, test)\ncart_metabolitePred <- predict(cart_metabolite, test)\nlog_metabolitePred <- predict(log_metabolite, test)\nrf_metabolitePred <- predict(rf_metabolite, test)\nsvm_metabolitePred <- predict(svm_metabolite, test)\nensemble_metabolitePred <- predict(ensemble_metabolite, test)\n\n## Brain imaging models\nknn_brainPred <- predict(knn_brain, test)\ncart_brainPred <- predict(cart_brain, test)\nlog_brainPred <- predict(log_brain, test)\nrf_brainPred <- predict(rf_brain, test)\nsvm_brainPred <- predict(svm_brain, test)\nensemble_brainPred <- predict(ensemble_brain, test)\n\n## Combined models\nknn_combinedPred <- predict(knn_combined, test)\ncart_combinedPred <- predict(cart_combined, test)\nlog_combinedPred <- predict(log_combined, test)\nrf_combinedPred <- predict(rf_combined, test)\nsvm_combinedPred <- predict(svm_combined, test)\nensemble_combinedPred <- predict(ensemble_combined, test)\n\n# Caret confusion matrices\n## Metabolite models\nknn_metaboliteCM <- confusionMatrix(knn_metabolitePred, test$Name)\ncart_metaboliteCM <- readRDS(\"loocv_cart.rds\")\nlog_metaboliteCM <- readRDS(\"loocv_log.rds\")\nrf_metaboliteCM <- readRDS(\"loocv_rf.rds\")\nsvm_metaboliteCM <- readRDS(\"loocv_svm.RDS\")\nensemble_metaboliteCM <- readRDS(\"ensemble.rds\")\n\n## Brain imaging models\nknn_brainCM <- readRDS(\"knn_brain.rds\")\ncart_brainCM <- readRDS(\"cart_brain.rds\")\nlog_brainCM <- readRDS(\"log_brain.rds\")\nrf_brainCM <- readRDS(\"rf_brain.rds\")\nsvm_brainCM <- readRDS(\"svm_brain.rds\")\nensemble_brainCM <- readRDS(\"ensemble_brain.rds\")\n\n## Combined models\nknn_combinedCM <- readRDS(\"knn_brain&metabolite.rds\")\ncart_combinedCM <- readRDS(\"cart_brain&metabolite.rds\")\nlog_combinedCM <- readRDS(\"log_brain&metabolite.rds\")\nrf_combinedCM <- readRDS(\"rf_brain&metabolite.rds\")\nsvm_combinedCM <- readRDS(\"svm_brain&metabolite.rds\")\nensemble_combinedCM <- readRDS(\"ensemble_brain&metabolite.rds\")",
+    "created" : 1525054877146.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "878189347",
+    "id" : "63F8BFEE",
+    "lastKnownWriteTime" : 5922078942709153791,
+    "last_content_update" : 1525055928916,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
